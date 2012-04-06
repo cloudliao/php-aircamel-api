@@ -15,7 +15,7 @@
 	require('aircamel_api.php');
 
 	$AircamelAPI = new Aircamel_api($api_key, $api_secret);
-
+    
 	/**
 	 ************************************************************************************************************************
 	 * 分類商品列表
@@ -63,8 +63,7 @@
         $dealId = $dealList['data'][0]['dealid'];
         
         echo "\n\n ----- 店舖交易明細 ----- \n";
-        $params['dealid'] = $dealId;
-        pre($AircamelAPI->store_deal_detail($params));
+        pre($AircamelAPI->store_deal_detail($dealId));
         unset($params);
     }
     
@@ -166,8 +165,7 @@
 	 ******************************************/
     echo "\n\n ----- 商品資訊 ----- \n";
     if($goodAdd['status'] == 'success'){
-        $params['pid'] = $goodAdd['data']['pid'];
-        pre($AircamelAPI->good_show($params));
+        pre($AircamelAPI->good_show($goodAdd['data']['pid']));
         unset($params);
     }
      
