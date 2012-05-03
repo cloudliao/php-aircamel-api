@@ -154,6 +154,17 @@
     $params['edate'] = date("Y-m-d", strtotime('+2 day'));
     $params['ehour'] = date("H");
     $params['age'] = 0;
+    $params['length'] = 0.1;
+    $params['width'] = 0.1;
+    $params['height'] = 0.1;
+    $params['weight'] = 1111;
+    $params['plength'] = 0.1;
+    $params['pwidth'] = 0.1;
+    $params['pheight'] = 0.1; 
+    $params['pweight'] = 1;
+    $params['ptag'] = array(1,2,3,4);
+    $params['tw_site'] = 1;
+    $params['cn_site'] = 0;
     
     pre($goodAdd = $AircamelAPI->good_add($params));
     unset($params);
@@ -257,7 +268,17 @@
         $params['edate'] = date("Y-m-d", strtotime('+2 day'));
         $params['ehour'] = date("H");
         $params['age'] = 0;
-        
+        $params['length'] = 1;
+        $params['width'] = 1;
+        $params['height'] = 1;
+        $params['weight'] = 1;
+        $params['plength'] = 0.2;
+        $params['pwidth'] = 0.2;
+        $params['pheight'] = 0.2;
+        $params['pweight'] = 2222; 
+        $params['ptag'] = array(1,2,3,4);
+        $params['tw_site'] = 1;
+        $params['cn_site'] = 0;
          
         pre($goodSet = $AircamelAPI->good_set($params));
         unset($params);
@@ -367,8 +388,19 @@
         $params['edate'] = date("Y-m-d", strtotime('+2 day'));
         $params['ehour'] = date("H");
         $params['age'] = 0;
+        $params['length'] = 1;
+        $params['width'] = 1;
+        $params['height'] = 1;
+        $params['weight'] = 1;
+        $params['plength'] = 0.2;
+        $params['pwidth'] = 0.2;
+        $params['pheight'] = 0.2;
+        $params['pweight'] = 2222; 
+        $params['ptag'] = array(1,2,3,4);
+        $params['tw_site'] = 1;
+        $params['cn_site'] = 0;
         
-         
+        sleep(1);
         pre($AircamelAPI->good_reset($params));
         unset($params);
     }
