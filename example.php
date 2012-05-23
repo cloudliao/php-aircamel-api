@@ -9,11 +9,14 @@
 	 **/
     
 	$api_key = '1326711257';
+	$api_key = '1334215352';
 	$api_secret = 'a0cfb4d6349957648c84ad5394b3e0e2';
+	$api_secret = 'a73fd47e14f646758ae6cc9cbd19c161';
     $output_type = 'serialize';
     
 	require('aircamel_api.php');
-
+    # $log_path = 'err.log';  # 如果你要開啟失敗記 log 的功能可以設定位置，此範例放在跟程式一樣的目錄底下
+    
 	$AircamelAPI = new Aircamel_api($api_key, $api_secret);
     
 	/**
@@ -60,17 +63,52 @@
 	 *
 	 ************************************************************************************************************************/
     if($dealList['status'] == "success" && count($dealList['data'])>0){
-        $dealId = $dealList['data'][0]['dealid'];
+        $dealId = $dealList['data'][0]['deal_id'];
         
         echo "\n\n ----- 店舖交易明細 ----- \n";
         pre($AircamelAPI->store_deal_detail($dealId));
         unset($params);
     }
     
+    /**
+	 ************************************************************************************************************************
+	 * 店舖交易對帳作業
+	 *
+	 ************************************************************************************************************************/
+    if($dealList['status'] == "success" && count($dealList['data'])>0){
+        $dealId = $dealList['data'][0]['deal_id'];
+        
+        echo "\n\n ----- 店舖交易對帳作業 ----- \n";
+        pre($AircamelAPI->store_deal_check($dealId));
+        unset($params);
+    }
+    
+    /**
+	 ************************************************************************************************************************
+	 * 店舖交易出貨作業
+	 * 
+     * 運送方式代碼對照表 http://api.aircamel.com.tw/apidoc/?t=shipping
+	 ************************************************************************************************************************/
+    if($dealList['status'] == "success" && count($dealList['data'])>0){
+        $params['deal_id']   = $dealList['data'][0]['deal_id'];
+        $params['ship_type'] = 7;                                # 面交取貨
+        $params['ship_no']   = 'C000033';                        # 物流追蹤碼
+        $params['date']      = '2012-05-22';                     # 出貨日期
+        $params['time']      = 14;                               # 出貨時間 2=> 14:00~15:00
+        $params['descript']  = '出貨說明'; 
+        $params['note']      = '出貨備註';
+        echo "\n\n ----- 店舖交易出貨作業 ----- \n";
+        pre($AircamelAPI->store_deal_ship($params));
+        unset($params);
+    }
+
 	/**
 	 ************************************************************************************************************************
 	 * 商品上架
 	 *
+     * 台灣特色代碼對照表 http://api.aircamel.com.tw/apidoc/?t=tag
+     * 商品分類代碼查詢表 http://api.aircamel.com.tw/apidoc/?t=category
+     * 商品所在地代碼對照表 http://api.aircamel.com.tw/apidoc/?t=location
 	 ************************************************************************************************************************/
     echo "\n\n ----- 商品上架 ----- \n";
     $params['pname'] = 'Aircamel API package 測試商品上架'.date("Y-m-d H:i:s");

@@ -73,12 +73,10 @@ Class Aircamel_api {
     
     function __construct($api_key , $api_secret) {
         global $log_path, $output_type;
-        
         $this->api_key = ($api_key != "") ? $api_key : '';
         $this->api_secret = ($api_secret != "") ? $api_secret : '';
         $this->output_type = ($output_type != "") ? $output_type : 'json';
         $this->log_path = ($log_path != "") ? $log_path : NULL;
-        
         if(isset($params) && is_array($params)){
             $this->post_array = $params;
         }
@@ -94,10 +92,7 @@ Class Aircamel_api {
      * @param array $logAr 
      */
     function log($logAr = NULL){
-    
-        if( ! isset($this->log_path)) $this->log_path = 'err.log';
         $array = str_replace("\n","",var_export($this->post_array, TRUE));
-
         error_log("[".date("Y-m-d_H:i:s")."] - {$logAr['action']} - {$logAr['code']} - $array\n", 3, $this->log_path);
     }
 
@@ -266,16 +261,46 @@ Class Aircamel_api {
     /**
      * 店舖交易明細
      * 取得我的店鋪內的單一訂單的明細資料
-     * @param string $params $dealid  交易編號
+     * @param string $params $deal_id  交易編號
      * @return array
      * @link http://api.aircamel.com.tw/apidoc/?t=doc&action=store.deal_detail
      */
-    function store_deal_detail($dealid){
-        if($dealid == ""){
-            return array('status' => false, 'msg' => 'dealid 必要參數忘了填');
+    function store_deal_detail($deal_id){
+        if($deal_id == ""){
+            return array('status' => false, 'msg' => 'deal_id 必要參數忘了填');
         }
         $params['action'] = 'store.deal_detail';
-        $params['dealid'] = $dealid;
+        $params['deal_id'] = $deal_id;
+        return $this->post($params);
+    }
+    /**
+     * 店舖交易對帳作業
+     * 將該筆訂單改為已對帳
+     * @param string $params $deal_id  交易編號
+     * @return array
+     * @link http://api.aircamel.com.tw/apidoc/?t=doc&action=store.deal_check
+     */
+    function store_deal_check($deal_id){
+        if($deal_id == ""){
+            return array('status' => false, 'msg' => 'deal_id 必要參數忘了填');
+        }
+        $params['action'] = 'store.deal_check';
+        $params['deal_id'] = $deal_id;
+        return $this->post($params);
+    }
+    /**
+     * 店舖交易出貨作業
+     * 將該筆訂單改為已出
+     * @param array $params deal_id  交易編號, ship_type 運送方式, ship_no 物流追蹤碼, date 出貨日期 (YYYY-mm-dd), time 時間 (1~24), descript 出貨說明, note 出貨備註  
+     * @return array
+     * @link http://api.aircamel.com.tw/apidoc/?t=doc&action=store.deal_ship
+     */
+    function store_deal_ship($params){
+         
+        $params['action'] = 'store.deal_ship';
+        if($params['deal_id'] == "" || $params['ship_type'] == "" || $params['date'] == "" || $params['time'] == ""){
+            return array('status' => false, 'msg' => '必要參數忘了填');
+        }
         return $this->post($params);
     }
     
